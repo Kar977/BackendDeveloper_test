@@ -1,16 +1,18 @@
 import time
+from typing import List
+
+import jwt
 from fastapi import APIRouter, Depends, HTTPException, status, Header
+from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
+from pydantic import ValidationError
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from sqlalchemy.orm import selectinload
-from pydantic import ValidationError
-from typing import List
 
-from models import User, Post, UserCreate, UserLogin, PostCreate, PostResponse, UserResponse
-from settings import settings
-from database import get_db
-from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
-import jwt
+from service_manager.database_structure.database import get_db
+from service_manager.database_structure.models import User, Post
+from service_manager.database_structure.schemas import UserCreate, UserLogin, PostCreate, PostResponse, UserResponse
+from service_manager.settings import settings
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="login")
 
@@ -99,7 +101,6 @@ async def get_posts(token: str = Depends(oauth2_scheme), db: AsyncSession = Depe
     if not user:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-    # Here we simulate in-memory caching for the posts
     cached_posts = user.posts
     return cached_posts
 

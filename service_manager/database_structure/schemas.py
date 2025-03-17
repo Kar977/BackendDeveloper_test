@@ -41,7 +41,7 @@ class PostCreate(BaseModel):
 
     @validator("text")
     def text_size(cls, v):
-        if len(v.encode("utf-8")) > 1048576:  # 1 MB limit
+        if len(v.encode("utf-8")) > 1048576:
             raise ValueError("Post payload exceeds 1MB")
         return v
 

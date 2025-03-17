@@ -1,8 +1,9 @@
-from sqlalchemy import Column, Integer, String, Text, ForeignKey
-from sqlalchemy.orm import relationship
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.types import LargeBinary
 import time
+
+from sqlalchemy import Column, Integer, String, Text, ForeignKey
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import relationship
+from sqlalchemy.types import LargeBinary
 
 Base = declarative_base()
 
@@ -30,7 +31,7 @@ class Post(Base):
     id = Column(Integer, primary_key=True, index=True)
     text = Column(Text, nullable=False)
     user_id = Column(Integer, ForeignKey("users.id"))
-    timestamp = Column(Integer, default=int(time.time()))  # Store timestamp as Unix time
+    timestamp = Column(Integer, default=int(time.time()))
 
     owner = relationship("User", back_populates="posts")
 
